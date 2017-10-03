@@ -9,4 +9,9 @@ require_once('view/LayoutView.php');
 require_once('view/LoginView.php');
 require_once('view/RegisterView.php');
 
-$controller = new controller\MainController();
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
+
+$controller = new \controller\MainController();
+
+$controller->start();
