@@ -11,16 +11,15 @@ class LoginView {
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
-
 	
-	
-	public function __construct() {
+	private $loginModel;
 
+	public function __construct($loginModel	) {
+		$this->loginModel = $loginModel;
 	}
 
     public function response() {
-        $message = "hejhopp";
-        return $this->generateLoginFormHTML($message);
+        return $this->generateLoginFormHTML();
 	}
 	
 
@@ -35,10 +34,6 @@ class LoginView {
 			return $_POST[self::$password];
 		}
 	}
-
-	public function outputMessage() {
-		
-	}
  
     
     private function generateLoginFormHTML($message) {
@@ -47,7 +42,7 @@ class LoginView {
 			<form method="post" > 
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
-					<p id="' . self::$messageId . '">' . $message . '</p>
+					<p id="' . self::$messageId . '">' . $this->loginModel->message() . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
 					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->getUsername() . '" />

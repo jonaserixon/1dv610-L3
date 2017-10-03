@@ -9,13 +9,13 @@ class LoginModel {
         $_SESSION['message'] = '';
 
         if ($username == '' && $password == '') {
-            $_SESSION['message'] = 'Username is missing';
+            $_SESSION['message'] = 'Username is missing1';
 
         } else if (strlen($username) > 0 && $password == '') {
             $_SESSION['message'] = 'Password is missing';
             
         } else if (strlen($password) > 0 && $username == '') {
-            $_SESSION['message'] = 'Username is missing';
+            $_SESSION['message'] = 'Username is missing2';
 
         } else if ($username == 'Admin' && $password == 'Password') {
 
@@ -41,6 +41,7 @@ class LoginModel {
     }
 
     public function message() {
+        header("Location: /");
         return $_SESSION['message'];
     }
 }
