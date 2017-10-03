@@ -4,7 +4,7 @@ namespace view;
 
 class LayoutView {
 
-    public function render($isLoggedIn, LoginView $v, RegisterView $rv) {
+    public function render($isLoggedIn, LoginView $v) {
         echo '<!DOCTYPE html>
         <html>
             <head>
@@ -13,12 +13,22 @@ class LayoutView {
             </head>
             <body>
             <h1>Assignment 2</h1>
-                        
+
+            ' . $this->renderIsLoggedIn($isLoggedIn) . '
+
             <div class="container">
                 ' . $v->response() . ' 
             </div>
             </body>
         </html>
         ';
+    }
+
+    private function renderIsLoggedIn($isLoggedIn) {
+        if ($isLoggedIn) {
+            return '<h2>Logged in</h2>';
+        }
+
+        return '<a href="?register">Register a new user</a><h2>Not logged in</h2>';
     }
 }

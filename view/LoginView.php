@@ -10,12 +10,35 @@ class LoginView {
 	private static $cookieName = 'LoginView::CookieName';
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
-    private static $messageId = 'LoginView::Message';
+	private static $messageId = 'LoginView::Message';
+
+	
+	
+	public function __construct() {
+
+	}
 
     public function response() {
         $message = "hejhopp";
         return $this->generateLoginFormHTML($message);
-    }
+	}
+	
+
+	public function getUsername() {
+		if (isset($_POST[self::$name])) {
+			return $_POST[self::$name];
+		}
+	}
+
+	public function getPassword() {
+		if (isset($_POST[self::$password])) {
+			return $_POST[self::$password];
+		}
+	}
+
+	public function outputMessage() {
+		
+	}
  
     
     private function generateLoginFormHTML($message) {
@@ -27,7 +50,7 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . "hejhehj" . '" />
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->getUsername() . '" />
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
 					<label for="' . self::$keep . '">Keep me logged in  :</label>
