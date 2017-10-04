@@ -35,7 +35,8 @@ class LoginModel {
             $_SESSION['message'] = 'Welcome';
             $_SESSION['loggedIn'] = true;
             
-            return header("Location: " . $_SERVER['REQUEST_URI']);
+            // return header("Location: " . $_SERVER['REQUEST_URI']);
+            return;
         }
 
         $_SESSION['loggedIn'] = false;
@@ -61,6 +62,12 @@ class LoginModel {
     public function rememberUsername() {
         if (isset($_SESSION['username'])) {
             return $_SESSION['username'];
+        }
+    }
+
+    public function clearMessage() {
+        if (isset($_SESSION['message'])) { 
+            return $_SESSION['message'] = '';
         }
     }
 

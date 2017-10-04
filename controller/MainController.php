@@ -22,7 +22,8 @@ class MainController {
         
         //Kollar om man redan är inloggad eller inte
         if ($this->loginModel->isLoggedIn()) {
-            $this->view->render(true, $this->loginView, "yolo");
+            //cleara session message
+            $this->view->render(true, $this->loginView, $this->loginModel->clearMessage());
         } else {
 
             if ($this->loginView->loginAttempt()) {
@@ -38,6 +39,7 @@ class MainController {
                 } else {
                     $this->view->render(false, $this->loginView, $message);
                 }
+                
             } else {
                 $this->view->render(false, $this->loginView, "");
             }
