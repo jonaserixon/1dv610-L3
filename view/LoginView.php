@@ -18,10 +18,23 @@ class LoginView {
 		$this->loginModel = $loginModel;
 	}
 
-    public function response() {
-        return $this->generateLoginFormHTML();
+    public function response($message) {
+		//Generera vy beroende på om man är inloggad eller ej
+		
+		if ($this->loginModel->isLoggedIn()) {
+			return $this->generateLogoutButtonHTML($message);
+		}
+
+        return $this->generateLoginFormHTML($message);
+	}
+
+	public function loginAttempt() {
+		return isset($_POST[self::$login]);
 	}
 	
+	public function logoutAttempt() {
+		return isset($_POST[self::$logout]);
+	}
 
 	public function getUsername() {
 		if (isset($_POST[self::$name])) {
@@ -36,13 +49,13 @@ class LoginView {
 	}
  
 
-    private function generateLoginFormHTML() {
+    private function generateLoginFormHTML($message) {
 		return '
 		
 			<form method="post" > 
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
-					<p id="' . self::$messageId . '">' . $this->loginModel->outputMessage() . '</p>
+					<p id="' . self::$messageId . '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
 					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->loginModel->rememberUsername() . '" />
@@ -53,6 +66,15 @@ class LoginView {
 					
 					<input type="submit" name="' . self::$login . '" value="login" />
 				</fieldset>
+			</form>
+		';
+	}
+
+	private function generateLogoutButtonHTML($message) {
+		return '
+			<form  method="post" >
+				<p id="' . self::$messageId . '">' . $message . '</p>
+				<input type="submit" name="' . self::$logout . '" value="logout"/>
 			</form>
 		';
 	}
