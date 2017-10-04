@@ -35,17 +35,17 @@ class LoginView {
 		}
 	}
  
-    
-    private function generateLoginFormHTML($message) {
+
+    private function generateLoginFormHTML() {
 		return '
 		
 			<form method="post" > 
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
-					<p id="' . self::$messageId . '">' . $this->loginModel->message() . '</p>
+					<p id="' . self::$messageId . '">' . $this->loginModel->outputMessage() . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->getUsername() . '" />
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->loginModel->rememberUsername() . '" />
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
 					<label for="' . self::$keep . '">Keep me logged in  :</label>

@@ -2,24 +2,32 @@
 
 namespace controller;
 
+
+
 class MainController {
+
+    private $loginModel;
+    private $view;
+    private $loginView;
+
+    public function __construct() {
+        $this->loginModel = new \model\LoginModel();
+        $this->view = new \view\LayoutView();
+        $this->loginView = new \view\LoginView($this->loginModel);
+    }
  
     public function start() {
-        $loginModel = new \model\LoginModel();
         
-
-        $view = new \view\LayoutView();
-        $loginView = new \view\LoginView($loginModel);
-
-
-        if ($loginModel->isLoggedIn()) {
-            $view->render(true, $loginView);
+        if ($this->loginModel->isLoggedIn()) {
+            $this->view->render(true, $this->loginView);
         } else {
-            $view->render(false, $loginView);
+            $this->view->render(false, $this->loginView);
         }
 
         //Validate login attempt
-        $loginModel->validateLoginAttempt($loginView->getUsername(), $loginView->getPassword());
+        $username = $this->loginView->getUsername();
+        $password = $this->loginView->getPassword();
         
+        $message = $this->loginModel->validateLoginAttempt($username, $password);
     }
 }
