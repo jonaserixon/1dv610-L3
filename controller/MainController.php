@@ -7,15 +7,21 @@ namespace controller;
 class MainController {
 
     private $loginModel;
+    private $registerModel;
+    private $databaseModel;
 
     private $view;
     private $loginView;
+    private $registerView;
 
     public function __construct() {
-        $this->loginModel = new \model\LoginModel(new \model\DatabaseModel());
+        $this->databaseModel = new \model\DatabaseModel();
+        $this->loginModel = new \model\LoginModel($this->databaseModel);
+        $this->registerModel = new \model\RegisterModel($this->databaseModel);
 
         $this->view = new \view\LayoutView();
         $this->loginView = new \view\LoginView($this->loginModel);
+        $this->registerView = new \view\RegisterView($this->registerModel);
     }
  
     public function start() {
@@ -39,11 +45,20 @@ class MainController {
                 } else {
                     $this->view->render(false, $this->loginView, $message);
                 }
-                
+
             } else {
                 $this->view->render(false, $this->loginView, "");
             }
+        }
 
+        if ($this->loginView->logoutAttempt()) {
+            $this->loginModel->unsetSession();
+            return header("Location: " . $_SERVER['REQUEST_URI']);
+        }
+
+
+        if ($this->registerView->clicksRegisterLink()) {
+            echo "HDSADJLJKASLDJASK";
         }
     }
 }

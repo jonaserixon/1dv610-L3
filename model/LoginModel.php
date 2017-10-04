@@ -45,6 +45,8 @@ class LoginModel {
     }
     
 
+
+
     public function isLoggedIn() {
         if (isset($_SESSION['loggedIn'])) {
             return $_SESSION['loggedIn'];
@@ -69,6 +71,12 @@ class LoginModel {
         if (isset($_SESSION['message'])) { 
             return $_SESSION['message'] = '';
         }
+    }
+
+    public function unsetSession() {
+        unset($_SESSION['loggedIn']);
+        unset($_SESSION['username']);
+        unset($_SESSION['message']);
     }
 
 }
