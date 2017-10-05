@@ -10,7 +10,7 @@ class RegisterModel {
         $this->database = $database;
     }
 
-    public function validateRegisterAttempt() {
+    public function validateRegisterAttempt($username, $password) {
         
     }
 
@@ -29,6 +29,4 @@ class RegisterModel {
 
         return false;
     }
-
-    
 }
