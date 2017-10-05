@@ -29,25 +29,25 @@ class MainController {
         //Kollar om man redan är inloggad eller inte
         if ($this->loginModel->isLoggedIn()) {
             //cleara session message
-            $this->view->render(true, $this->loginView, $this->loginModel->clearMessage());
+            $this->view->render(true, $this->loginView, $this->registerView, $this->loginModel->clearMessage(), 'login');
+        } else if ($this->registerModel->checkRegisterState()) {
+            $this->view->render(false, $this->loginView, $this->registerView, 'register bro' , 'register');
+
+            $this->registerModel->hasRenderedRegister();
         } else {
 
             if ($this->loginView->loginAttempt()) {
                 
-                $username = $this->loginView->getUsername();
-                $password = $this->loginView->getPassword();
-    
-                //Set message and login attemp result in isLoggedIn()
-                $message = $this->loginModel->validateLoginAttempt($username, $password);
+                $message = $this->getMessage();
     
                 if ($this->loginModel->isLoggedIn()) {
-                    $this->view->render(true, $this->loginView, 'Welcome');
+                    $this->view->render(true, $this->loginView, $this->registerView, 'Welcome', 'login');
                 } else {
-                    $this->view->render(false, $this->loginView, $message);
+                    $this->view->render(false, $this->loginView, $this->registerView, $message, 'login');
                 }
 
             } else {
-                $this->view->render(false, $this->loginView, "");
+                $this->view->render(false, $this->loginView, $this->registerView, "", 'login');
             }
         }
 
@@ -58,7 +58,18 @@ class MainController {
 
 
         if ($this->registerView->clicksRegisterLink()) {
-            echo "HDSADJLJKASLDJASK";
+            $this->registerModel->wantsToRenderRegister();
+            return header("Location: /1dv610-L3/index.php");
         }
+    }
+
+    
+
+    private function getMessage() {
+        $username = $this->loginView->getUsername();
+        $password = $this->loginView->getPassword();
+
+        //get message from login attempt
+        return $this->loginModel->validateLoginAttempt($username, $password);
     }
 }

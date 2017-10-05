@@ -10,9 +10,17 @@ class RegisterView {
     private static $passwordRepeat = 'RegisterView::PasswordRepeat';
     private static $doRegistration = 'RegisterView::Register';
 
+
+    private $registerModel;
+    
+    public function __construct($registerModel	) {
+        $this->registerModel = $registerModel;
+    }
+
+
     public function response() {
 
-        return $this->generateRegisterFormHTML($message);
+        return $this->generateRegisterFormHTML('');
     }
 
     public function attemptRegister() {
