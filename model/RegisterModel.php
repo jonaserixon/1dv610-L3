@@ -46,7 +46,7 @@ class RegisterModel {
                 $_SESSION['isRegistered'] = true;
 
                 $this->database->register($username, $password);
-                return header("Location: http://localhost/1dv610-L3/index.php");
+                return header("Location: /1dv610-L3/index.php");
             }
         }
         $_SESSION['isRegistered'] = false;

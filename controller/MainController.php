@@ -22,8 +22,8 @@ class MainController {
         $this->loginView = new \view\LoginView($this->loginModel);
         $this->registerView = new \view\RegisterView($this->registerModel);
 
+        //Tveksamt
         $this->registerModel = new \model\RegisterModel($this->databaseModel, $this->registerView);
-        
     }
  
     public function start() {
@@ -74,6 +74,8 @@ class MainController {
                 if (isset($_SESSION['logoutMessage'])) {
                     $this->view->render(false, $this->loginView, $this->registerView, $_SESSION['logoutMessage'], 'login');     
                     $_SESSION['logoutMessage'] = '';               
+                } else if (isset($_SESSION['isRegistered']) && $_SESSION['isRegistered'] = true) {
+                    $this->view->render(false, $this->loginView, $this->registerView, "Registered new user.", 'login');
                 } else {
                     $this->view->render(false, $this->loginView, $this->registerView, '', 'login');
                 }
