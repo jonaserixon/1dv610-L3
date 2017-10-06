@@ -49,7 +49,9 @@ class LoginView {
 	}
 
 	public function rememberUsername() {
-        if (isset($_POST[self::$name])) {
+		if (isset($_SESSION['registeredName'])) {
+			return $_SESSION['registeredName'];
+		} else if (isset($_POST[self::$name])) {
             return $_POST[self::$name];
         }
     }

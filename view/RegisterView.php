@@ -10,6 +10,7 @@ class RegisterView {
     private static $passwordRepeat = 'RegisterView::PasswordRepeat';
     private static $doRegistration = 'RegisterView::Register';
 
+    private $theUsername;
 
     private $registerModel;
     
@@ -54,9 +55,17 @@ class RegisterView {
     
 
     public function rememberUsername() {
+        if (strlen($this->theUsername) > 1) {
+            return $this->theUsername;
+        } 
+
         if (isset($_POST[self::$username])) {
             return $_POST[self::$username];
-        }
+        }    
+    }
+
+    public function setUsername($username) {
+        $this->theUsername = $username;
     }
     
 
@@ -79,5 +88,4 @@ class RegisterView {
             </form>
         ';
     }
-
 }

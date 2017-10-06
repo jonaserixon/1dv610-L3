@@ -17,14 +17,17 @@ class MainController {
     public function __construct() {
         $this->databaseModel = new \model\DatabaseModel();
         $this->loginModel = new \model\LoginModel($this->databaseModel);
-        $this->registerModel = new \model\RegisterModel($this->databaseModel);
 
         $this->view = new \view\LayoutView();
         $this->loginView = new \view\LoginView($this->loginModel);
         $this->registerView = new \view\RegisterView($this->registerModel);
+
+        $this->registerModel = new \model\RegisterModel($this->databaseModel, $this->registerView);
+        
     }
  
     public function start() {
+        ob_start();
         
         //Kollar om man redan är inloggad eller inte
         if ($this->loginModel->isLoggedIn()) {
@@ -61,40 +64,38 @@ class MainController {
                 
                 if ($this->registerView->attemptRegister()) {
                     $message = $this->getMessage('register');
+
                 }
                 $this->view->render(false, $this->loginView, $this->registerView, $message , 'register');
             
             } else {
-                //Rendera 'home' vyn
-                $this->view->render(false, $this->loginView, $this->registerView, "", 'login');
+                //Rendera 'home' vyn 
+                
+                if (isset($_SESSION['logoutMessage'])) {
+                    $this->view->render(false, $this->loginView, $this->registerView, $_SESSION['logoutMessage'], 'login');     
+                    $_SESSION['logoutMessage'] = '';               
+                } else {
+                    $this->view->render(false, $this->loginView, $this->registerView, '', 'login');
+                }
                 
             }
         }
 
-
         if ($this->loginView->logoutAttempt()) {
             $this->loginModel->unsetSession();
             header("Location: " . $_SERVER['REQUEST_URI']);
-            exit;
+            exit;          
         }
-
     }
 
-
+    //Get messages from the input validation methods
     private function getMessage($decideWhichView) {
 
         if ($decideWhichView == 'login') {
-            $username = $this->loginView->getUsername();
-            $password = $this->loginView->getPassword();
-
-            return $this->loginModel->validateLoginAttempt($username, $password);
+            return $this->loginModel->validateLoginAttempt($this->loginView->getUsername(), $this->loginView->getPassword());
 
         } else if ($decideWhichView == 'register') {
-            $username = $this->registerView->getUsername();
-            $password = $this->registerView->getPassword();
-            $passwordRepeat = $this->registerView->getRepeatedPassword();
-            
-            return $this->registerModel->validateRegisterAttempt($username, $password, $passwordRepeat);
+            return $this->registerModel->validateRegisterAttempt($this->registerView->getUsername(), $this->registerView->getPassword(), $this->registerView->getRepeatedPassword());
         }
     }
 }

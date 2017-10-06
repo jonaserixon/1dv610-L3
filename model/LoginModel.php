@@ -16,36 +16,31 @@ class LoginModel {
         $_SESSION['message'] = '';
 
         if ($username == '' && $password == '') {
-            // $_SESSION['message'] = 'Username is missing';
-
             $message = 'Username is missing';
             
         } else if (strlen($username) > 0 && $password == '') {
-            // $_SESSION['message'] = 'Password is missing';
-
             $message = 'Password is missing';
 
         } else if (strlen($password) > 0 && $username == '') {
-            // $_SESSION['message'] = 'Username is missing';
-
             $message = 'Username is missing';
 
-        } else if ($username == 'Admin' && $password == 'Password') {
+        } else if ($this->database->findAndVerifyUser($username, $password)) {
             $_SESSION['message'] = 'Welcome';
             $_SESSION['loggedIn'] = true;
-            
             return;
+            
+        } else if (!$this->database->findAndVerifyUser($username, $password)) {
+            $message = 'Wrong name or password';
         }
 
         $_SESSION['loggedIn'] = false;
+
         return $message;
     }
     
-
-
-
     public function isLoggedIn() {
         if (isset($_SESSION['loggedIn'])) {
+            unset($_SESSION['logoutMessage']);
             return $_SESSION['loggedIn'];
         }
         
@@ -58,8 +53,6 @@ class LoginModel {
         }
     }
 
-    
-
     public function clearMessage() {
         if (isset($_SESSION['message'])) { 
             return $_SESSION['message'] = '';
@@ -70,6 +63,6 @@ class LoginModel {
         unset($_SESSION['loggedIn']);
         unset($_SESSION['username']);
         unset($_SESSION['message']);
+        $_SESSION['logoutMessage'] = 'Bye bye!';
     }
-
 }

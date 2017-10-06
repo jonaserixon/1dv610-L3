@@ -5,9 +5,11 @@ namespace model;
 class RegisterModel {
 
     private $database;
+    private $registerView;
     
-    public function __construct($database) {
+    public function __construct($database, $registerView) {
         $this->database = $database;
+        $this->registerView = $registerView;
     }
 
     public function validateRegisterAttempt($username, $password, $passwordRepeat) {
@@ -27,22 +29,24 @@ class RegisterModel {
             if ($password != $passwordRepeat) {
                 $message = 'Passwords do not match.';
 
-            // } else if ($this->database->alreadyExist($username)) {
-            //     $message = 'User exists, pick another username.';
+            } else if ($this->database->alreadyExist($username)) {
+                $message = 'User exists, pick another username.';
 
             } else if (preg_match('/</',$username) || (preg_match('/>/',$username))) {
                 $message = 'Username contains invalid characters.';
                 $newName =  strip_tags($username);
                 $username = $newName;
+                $this->registerView->setUsername($newName);
+                //Fixa 
+                //bättre 
+                //lösning
 
             } else  {
-                // $_SESSION['username'] = $username;
+                $_SESSION['registeredName'] = $username;
                 $_SESSION['isRegistered'] = true;
-                echo "du blev reggad, jao";
 
-                // $this->database->register($username, $password);
-
-                return;
+                $this->database->register($username, $password);
+                return header("Location: http://localhost/1dv610-L3/index.php");
             }
         }
         $_SESSION['isRegistered'] = false;

@@ -13,19 +13,15 @@ class LayoutView {
             </head>
             <body>
             <h1>Assignment 2</h1>
-
             ' . $this->renderIsLoggedIn($isLoggedIn, $decideViewToRender) . '
-
             <div class="container">
-                ' . $this->renderLoginOrRegister($v, $rv, $message, $decideViewToRender) . ' 
-
+                ' . $this->renderLoginOrRegister($v, $rv, $message, $decideViewToRender) . '
                 ' . $this->displayTime() . '
             </div>
             </body>
         </html>
         ';
     }
-
 
     private function renderIsLoggedIn($isLoggedIn, $decideViewToRender) {
         if ($isLoggedIn) {
