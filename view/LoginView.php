@@ -47,6 +47,12 @@ class LoginView {
 			return $_POST[self::$password];
 		}
 	}
+
+	public function rememberUsername() {
+        if (isset($_POST[self::$name])) {
+            return $_POST[self::$name];
+        }
+    }
  
 
     private function generateLoginFormHTML($message) {
@@ -58,7 +64,7 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->loginModel->rememberUsername() . '" />
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->rememberUsername() . '" />
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
 					<label for="' . self::$keep . '">Keep me logged in  :</label>

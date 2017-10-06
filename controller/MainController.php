@@ -28,17 +28,23 @@ class MainController {
         
         //Kollar om man redan är inloggad eller inte
         if ($this->loginModel->isLoggedIn()) {
-            //cleara session message
+            //Då skall message clearas
             $this->view->render(true, $this->loginView, $this->registerView, $this->loginModel->clearMessage(), 'login');
-        } else if ($this->registerModel->checkRegisterState()) {
-            $this->view->render(false, $this->loginView, $this->registerView, 'register bro' , 'register');
-
-            $this->registerModel->hasRenderedRegister();
+                        
         } else {
+            //Annars kollar vad användaren vill göra för något:
 
+
+            //Om användaren klickar på register a taggen
+            if ($this->registerView->clicksRegisterLink()) {
+                //Sätter sessionsvariabel till true
+                $this->registerModel->wantsToRenderRegister();
+            }
+
+            //Försöker logga in
             if ($this->loginView->loginAttempt()) {
                 
-                $message = $this->getMessage();
+                $message = $this->getMessage('login');
     
                 if ($this->loginModel->isLoggedIn()) {
                     $this->view->render(true, $this->loginView, $this->registerView, 'Welcome', 'login');
@@ -46,30 +52,49 @@ class MainController {
                     $this->view->render(false, $this->loginView, $this->registerView, $message, 'login');
                 }
 
+            //Kolla om användaren vill se register vyn
+            } else if ($this->registerModel->checkRegisterState()) {
+                
+                $this->registerModel->hasRenderedRegister();
+
+                $message = "";
+                
+                if ($this->registerView->attemptRegister()) {
+                    $message = $this->getMessage('register');
+                }
+                $this->view->render(false, $this->loginView, $this->registerView, $message , 'register');
+            
             } else {
+                //Rendera 'home' vyn
                 $this->view->render(false, $this->loginView, $this->registerView, "", 'login');
+                
             }
         }
 
+
         if ($this->loginView->logoutAttempt()) {
             $this->loginModel->unsetSession();
-            return header("Location: " . $_SERVER['REQUEST_URI']);
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit;
         }
 
-
-        if ($this->registerView->clicksRegisterLink()) {
-            $this->registerModel->wantsToRenderRegister();
-            return header("Location: /1dv610-L3/index.php");
-        }
     }
 
-    
 
-    private function getMessage() {
-        $username = $this->loginView->getUsername();
-        $password = $this->loginView->getPassword();
+    private function getMessage($decideWhichView) {
 
-        //get message from login attempt
-        return $this->loginModel->validateLoginAttempt($username, $password);
+        if ($decideWhichView == 'login') {
+            $username = $this->loginView->getUsername();
+            $password = $this->loginView->getPassword();
+
+            return $this->loginModel->validateLoginAttempt($username, $password);
+
+        } else if ($decideWhichView == 'register') {
+            $username = $this->registerView->getUsername();
+            $password = $this->registerView->getPassword();
+            $passwordRepeat = $this->registerView->getRepeatedPassword();
+            
+            return $this->registerModel->validateRegisterAttempt($username, $password, $passwordRepeat);
+        }
     }
 }

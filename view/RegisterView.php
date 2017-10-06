@@ -18,17 +18,45 @@ class RegisterView {
     }
 
 
-    public function response() {
-
-        return $this->generateRegisterFormHTML('');
+    public function response($message) {
+        return $this->generateRegisterFormHTML($message);
     }
+
 
     public function attemptRegister() {
-        return isset($_POST[self::$doRegistration]);        
+        return isset($_POST['RegisterView::Register']);        
     }
+
 
     public function clicksRegisterLink() {
         return isset($_GET['register']);
+    }
+
+
+    public function getUsername() {
+		if (isset($_POST[self::$username])) {
+			return $_POST[self::$username];
+		}
+	}
+
+
+	public function getPassword() {
+		if (isset($_POST[self::$password])) {
+			return $_POST[self::$password];
+		}
+    }
+
+    public function getRepeatedPassword() {
+		if (isset($_POST[self::$passwordRepeat])) {
+			return $_POST[self::$passwordRepeat];
+		}
+    }
+    
+
+    public function rememberUsername() {
+        if (isset($_POST[self::$username])) {
+            return $_POST[self::$username];
+        }
     }
     
 
@@ -40,7 +68,7 @@ class RegisterView {
                     <p id="' . self::$messageId . '">' . $message . '</p>
                     
                     <label for="' . self::$username . '">Username :</label> 
-                    <input type="text" size="20" id="' . self::$username . '" name="' . self::$username . '" value="' . "" . '" />         <br>
+                    <input type="text" size="20" id="' . self::$username . '" name="' . self::$username . '" value="' . $this->rememberUsername() . '" />         <br>
                     <label for="' . self::$password . '">Password :</label>
                     <input id="' . self::$password . '" size="20"  name="' . self::$password . '"  value="" type="password"/>              <br>
                     <label for="' . self::$passwordRepeat . '">Repeat password  :</label>
