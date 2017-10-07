@@ -23,18 +23,18 @@ class SessionModel {
         }
     }
 
+    public function getSpecificMessage($messageName) {
+        return $_SESSION[$messageName];
+    }
+
+    public function setSpecificMessage($messageName, $message) {
+        $_SESSION[$messageName] = $message;
+    }
+
     public function unsetSessions() {
         unset($_SESSION['loggedIn']);
         unset($_SESSION['username']);
-        unset($_SESSION['message']);
-    }
-
-    public function getLogoutMessage() {
-        return $_SESSION['logoutMessage'];
-    }
-
-    public function setLogoutMessage($message) {
-        $_SESSION['logoutMessage'] = $message;
+        // unset($_SESSION['message']);
     }
 
 
@@ -44,7 +44,6 @@ class SessionModel {
         if (isset($_SESSION['isRegistered']) && $_SESSION['isRegistered']) {
             return $_SESSION['isRegistered'];
         }
-        
         return false;
     }
 

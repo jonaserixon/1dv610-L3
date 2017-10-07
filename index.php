@@ -12,8 +12,8 @@ require_once('view/LayoutView.php');
 require_once('view/LoginView.php');
 require_once('view/RegisterView.php');
 
-// error_reporting(E_ALL);
-// ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
 
 session_start();
 

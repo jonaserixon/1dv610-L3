@@ -11,6 +11,9 @@ class LoginView {
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
+
+	private static $editName = 'LoginView::EditName';
+	private static $newName = 'LoginView::NewName';	
 	
 	private $loginModel;
 	private $sessionModel;
@@ -20,10 +23,14 @@ class LoginView {
 		$this->sessionModel = $sessionModel;
 	}
 
-    public function response($message) {
+    public function response($message, $shouldRenderEditname) {
 		//Generera vy beroende på om man är inloggad eller ej
 		
 		if ($this->sessionModel->isLoggedIn()) {
+
+			if ($shouldRenderEditname) {
+				return $this->generateEditUsernameHTML($message);
+			}
 			return $this->generateLogoutButtonHTML($message);
 		}
 
@@ -56,7 +63,18 @@ class LoginView {
 		} else if (isset($_POST[self::$name])) {
             return $_POST[self::$name];
         }
-    }
+	}
+	
+
+
+	//EDIT USERNAME
+	public function clicksChangeName() {
+        return isset($_GET['edit']);
+	}
+	
+	public function editAttempt() {
+		return isset($_POST[self::$editName]);
+	}
  
 
     private function generateLoginFormHTML($message) {
@@ -84,6 +102,24 @@ class LoginView {
 		return '
 			<form  method="post" >
 				<p id="' . self::$messageId . '">' . $message . '</p>
+				<input type="submit" name="' . self::$logout . '" value="logout"/>
+			</form>
+		';
+	}
+
+
+	private function generateEditUsernameHTML($message) {
+		return '
+		<h1>Edit your username</h1>
+			<form  method="post" >
+				<p id="' . self::$messageId . '">' . $message . '</p>
+				<input type="text" id="' . self::$newName . '" name="' . self::$newName . '" value="Enter new name" />
+				<input type="submit" name="' . self::$editName . '" value="Edit name"/>
+			</form>
+
+			<br>
+
+			<form  method="post" >
 				<input type="submit" name="' . self::$logout . '" value="logout"/>
 			</form>
 		';

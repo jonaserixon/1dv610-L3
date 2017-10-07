@@ -25,7 +25,7 @@ class LayoutView {
 
     private function renderIsLoggedIn($isLoggedIn, $decideViewToRender) {
         if ($isLoggedIn) {
-            return '<a href="?">Change username</a><h2>Logged in</h2>';
+            return '<a href="?edit">Change username</a><h2>Logged in</h2>';
         }
         if ($decideViewToRender == 'register') {
             return '<a href="/1dv610-L3/index.php">Back to login</a><h2>Not logged in</h2><h2>Register new user</h2>';
@@ -41,9 +41,11 @@ class LayoutView {
 
     private function renderLoginOrRegister($v, $rv, $message, $decideViewToRender) {
         if ($decideViewToRender == 'login') {
-            return $v->response($message);
-        } else {
+            return $v->response($message, false);
+        } else if ($decideViewToRender == 'register') {
             return $rv->response($message);
+        } else if ($decideViewToRender == 'editname') {
+            return $v->response($message, true);            
         }
     }
 }

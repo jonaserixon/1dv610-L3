@@ -32,16 +32,16 @@ class MainController {
 
         //Kollar om man redan är inloggad eller inte
         if ($this->sessionModel->isLoggedIn()) {
-            //Då skall message clearas
-            $this->view->render(true, $this->loginView, $this->registerView, $this->sessionModel->clearMessage(), 'login');
+            //Då skall message (Welcome) clearas
 
+            if ($this->loginView->clicksChangeName()) {
+                $this->view->render(true, $this->loginView, $this->registerView, $this->sessionModel->clearMessage(), 'editname');                
+            } else {
+                $this->view->render(true, $this->loginView, $this->registerView, $this->sessionModel->clearMessage(), 'login');                
+            }
         } else {
-            //Annars kollar vad användaren vill göra för något:
-
-
             //Om användaren klickar på register a taggen
             if ($this->registerView->clicksRegisterLink()) {
-                //Sätter sessionsvariabel till true
                 $this->sessionModel->wantsToRenderRegister();
             }
 
@@ -75,9 +75,9 @@ class MainController {
                 //Fixa detta
                 if (isset($_SESSION['logoutMessage'])) {
 
-                    $this->view->render(false, $this->loginView, $this->registerView, '', 'login');     
+                    $this->view->render(false, $this->loginView, $this->registerView, $this->sessionModel->getSpecificMessage('logoutMessage'), 'login');     
                     //Ytterst tveksamt
-                    // $this->sessionModel->setLogoutMessage('');
+                    unset($_SESSION['logoutMessage']);
 
                 } else if ($this->sessionModel->isRegistered()) {
                     $this->view->render(false, $this->loginView, $this->registerView, 'Registered new user.', 'login');
@@ -87,10 +87,12 @@ class MainController {
             }
         }
 
+        
+
         if ($this->loginView->logoutAttempt()) {
             $this->sessionModel->unsetSessions();
 
-            // $this->sessionModel->setLogoutMessage('Bye bye!');
+            $this->sessionModel->setSpecificMessage('logoutMessage' , 'Bye bye!');
 
             return header("Location: /1dv610-L3/");
         }
