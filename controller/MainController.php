@@ -2,13 +2,12 @@
 
 namespace controller;
 
-
-
 class MainController {
 
     private $loginModel;
     private $registerModel;
     private $databaseModel;
+    private $sessionModel;
 
     private $view;
     private $loginView;
@@ -17,9 +16,10 @@ class MainController {
     public function __construct() {
         $this->databaseModel = new \model\DatabaseModel();
         $this->loginModel = new \model\LoginModel($this->databaseModel);
+        $this->sessionModel = new \model\SessionModel();
 
         $this->view = new \view\LayoutView();
-        $this->loginView = new \view\LoginView($this->loginModel);
+        $this->loginView = new \view\LoginView($this->loginModel, $this->sessionModel);
         $this->registerView = new \view\RegisterView($this->registerModel);
 
         //Tveksamt
@@ -27,13 +27,14 @@ class MainController {
     }
  
     public function start() {
-        ob_start();
-        
+        ob_start(); //För att undvika error 'Warning: Cannot modify header information - headers already sent by...'
+
+
         //Kollar om man redan är inloggad eller inte
-        if ($this->loginModel->isLoggedIn()) {
+        if ($this->sessionModel->isLoggedIn()) {
             //Då skall message clearas
-            $this->view->render(true, $this->loginView, $this->registerView, $this->loginModel->clearMessage(), 'login');
-                        
+            $this->view->render(true, $this->loginView, $this->registerView, $this->sessionModel->clearMessage(), 'login');
+
         } else {
             //Annars kollar vad användaren vill göra för något:
 
@@ -41,7 +42,7 @@ class MainController {
             //Om användaren klickar på register a taggen
             if ($this->registerView->clicksRegisterLink()) {
                 //Sätter sessionsvariabel till true
-                $this->registerModel->wantsToRenderRegister();
+                $this->sessionModel->wantsToRenderRegister();
             }
 
             //Försöker logga in
@@ -49,18 +50,18 @@ class MainController {
                 
                 $message = $this->getMessage('login');
     
-                if ($this->loginModel->isLoggedIn()) {
+                if ($this->sessionModel->isLoggedIn()) {
                     $this->view->render(true, $this->loginView, $this->registerView, 'Welcome', 'login');
                 } else {
                     $this->view->render(false, $this->loginView, $this->registerView, $message, 'login');
                 }
 
             //Kolla om användaren vill se register vyn
-            } else if ($this->registerModel->checkRegisterState()) {
+            } else if ($this->sessionModel->checkRegisterState()) {
                 
-                $this->registerModel->hasRenderedRegister();
+                $this->sessionModel->hasRenderedRegister();
 
-                $message = "";
+                $message = '';
                 
                 if ($this->registerView->attemptRegister()) {
                     $message = $this->getMessage('register');
@@ -69,24 +70,29 @@ class MainController {
                 $this->view->render(false, $this->loginView, $this->registerView, $message , 'register');
             
             } else {
-                //Rendera 'home' vyn 
-                
+                //Rendera 'home' vyn
+
+                //Fixa detta
                 if (isset($_SESSION['logoutMessage'])) {
-                    $this->view->render(false, $this->loginView, $this->registerView, $_SESSION['logoutMessage'], 'login');     
-                    $_SESSION['logoutMessage'] = '';               
-                } else if (isset($_SESSION['isRegistered']) && $_SESSION['isRegistered'] = true) {
-                    $this->view->render(false, $this->loginView, $this->registerView, "Registered new user.", 'login');
+
+                    $this->view->render(false, $this->loginView, $this->registerView, '', 'login');     
+                    //Ytterst tveksamt
+                    // $this->sessionModel->setLogoutMessage('');
+
+                } else if ($this->sessionModel->isRegistered()) {
+                    $this->view->render(false, $this->loginView, $this->registerView, 'Registered new user.', 'login');
                 } else {
                     $this->view->render(false, $this->loginView, $this->registerView, '', 'login');
                 }
-                
             }
         }
 
         if ($this->loginView->logoutAttempt()) {
-            $this->loginModel->unsetSession();
-            header("Location: " . $_SERVER['REQUEST_URI']);
-            exit;          
+            $this->sessionModel->unsetSessions();
+
+            // $this->sessionModel->setLogoutMessage('Bye bye!');
+
+            return header("Location: /1dv610-L3/");
         }
     }
 

@@ -25,7 +25,7 @@ class LayoutView {
 
     private function renderIsLoggedIn($isLoggedIn, $decideViewToRender) {
         if ($isLoggedIn) {
-            return '<h2>Logged in</h2>';
+            return '<a href="?">Change username</a><h2>Logged in</h2>';
         }
         if ($decideViewToRender == 'register') {
             return '<a href="/1dv610-L3/index.php">Back to login</a><h2>Not logged in</h2><h2>Register new user</h2>';

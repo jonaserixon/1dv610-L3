@@ -54,27 +54,27 @@ class RegisterModel {
         return $message;
     }
 
-    public function isRegistered() {
-        if (isset($_SESSION['isRegistered'])) {
-            return $_SESSION['isRegistered'];
-        }
+    // public function isRegistered() {
+    //     if (isset($_SESSION['isRegistered']) && $_SESSION['isRegistered']) {
+    //         return $_SESSION['isRegistered'];
+    //     }
         
-        return false;
-    }
+    //     return false;
+    // }
 
-    public function wantsToRenderRegister() {
-        $_SESSION['register'] = true;
-    }
+    // public function wantsToRenderRegister() {
+    //     $_SESSION['register'] = true;
+    // }
 
-    public function hasRenderedRegister() {
-        $_SESSION['register'] = false;
-    }
+    // public function hasRenderedRegister() {
+    //     $_SESSION['register'] = false;
+    // }
 
-    public function checkRegisterState() {
-        if (isset($_SESSION['register']) && $_SESSION['register'] == true) {
-            return true;
-        }
+    // public function checkRegisterState() {
+    //     if (isset($_SESSION['register']) && $_SESSION['register'] == true) {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 }

@@ -37,32 +37,4 @@ class LoginModel {
 
         return $message;
     }
-    
-    public function isLoggedIn() {
-        if (isset($_SESSION['loggedIn'])) {
-            unset($_SESSION['logoutMessage']);
-            return $_SESSION['loggedIn'];
-        }
-        
-        return false;
-    }
-
-    public function outputMessage() {
-        if (isset($_SESSION['message'])) { 
-            return $_SESSION['message'];
-        }
-    }
-
-    public function clearMessage() {
-        if (isset($_SESSION['message'])) { 
-            return $_SESSION['message'] = '';
-        }
-    }
-
-    public function unsetSession() {
-        unset($_SESSION['loggedIn']);
-        unset($_SESSION['username']);
-        unset($_SESSION['message']);
-        $_SESSION['logoutMessage'] = 'Bye bye!';
-    }
 }

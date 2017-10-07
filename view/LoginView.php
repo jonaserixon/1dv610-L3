@@ -13,15 +13,17 @@ class LoginView {
 	private static $messageId = 'LoginView::Message';
 	
 	private $loginModel;
+	private $sessionModel;
 
-	public function __construct($loginModel	) {
+	public function __construct($loginModel, $sessionModel) {
 		$this->loginModel = $loginModel;
+		$this->sessionModel = $sessionModel;
 	}
 
     public function response($message) {
 		//Generera vy beroende på om man är inloggad eller ej
 		
-		if ($this->loginModel->isLoggedIn()) {
+		if ($this->sessionModel->isLoggedIn()) {
 			return $this->generateLogoutButtonHTML($message);
 		}
 
