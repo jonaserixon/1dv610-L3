@@ -36,18 +36,17 @@ class MainController {
         if ($this->sessionModel->isLoggedIn()) {
 
             if ($this->loginView->clicksChangeName()) {
-
-                $message = '';
                                 
                 if ($this->loginView->editAttempt()) {
-                    $message = $this->loginModel->validateEditedName($this->loginView->getEditedName());
+                    $this->view->setMessage($this->loginModel->validateEditedName($this->loginView->getEditedName()));
                 }
 
-                return $this->view->render(true, $this->loginView, $this->registerView, $message, 'editname');
+                return $this->view->render(true, $this->loginView, $this->registerView, 'editname');
                 
             } else if ($this->loginView->logoutAttempt() === false) {
 
-                return $this->view->render(true, $this->loginView, $this->registerView, $this->sessionModel->clearMessage(), 'login');                
+                //tomt message
+                return $this->view->render(true, $this->loginView, $this->registerView, 'login');                
             }
         } else {
             //Om användaren klickar på register länken
@@ -58,35 +57,33 @@ class MainController {
             //Försöker logga in
             if ($this->loginView->loginAttempt()) {
                 
-                $message = $this->getMessage('login');
+                $this->view->setMessage($this->getMessage('login'));
     
                 if ($this->sessionModel->isLoggedIn()) {
-                    
-                    return $this->view->render(true, $this->loginView, $this->registerView, 'Welcome', 'login');
+                    return $this->view->render(true, $this->loginView, $this->registerView, 'login');
                 } else {
-                    return $this->view->render(false, $this->loginView, $this->registerView, $message, 'login');
+                    return $this->view->render(false, $this->loginView, $this->registerView, 'login');
                 }
                 
             //Kolla om användaren vill se register vyn
             } else if ($this->sessionModel->checkRegisterState()) {
                 
                 $this->sessionModel->hasRenderedRegister();
-
-                $message = '';
                 
                 if ($this->registerView->attemptRegister()) {
-                    $message = $this->getMessage('register');
-
+                    $this->view->setMessage($this->getMessage('register'));
                 }
-                return $this->view->render(false, $this->loginView, $this->registerView, $message , 'register');
+                return $this->view->render(false, $this->loginView, $this->registerView, 'register');
             
             } else {
                 //Rendera 'home' vyn
 
                 if ($this->sessionModel->isRegistered()) {
-                    return $this->view->render(false, $this->loginView, $this->registerView, 'Registered new user.', 'login');
+                    //registered new user
+                    $this->view->setMessage('Registered new user.');
+                    return $this->view->render(false, $this->loginView, $this->registerView, 'login');
                 } else {
-                    return $this->view->render(false, $this->loginView, $this->registerView, '', 'login');
+                    return $this->view->render(false, $this->loginView, $this->registerView, 'login');
                 }
             }
         }
@@ -94,29 +91,21 @@ class MainController {
         
         if ($this->loginView->logoutAttempt()) {
             if ($this->sessionModel->isLoggedIn()) {
-                $message = 'Bye bye!';
-            } else {
-                $message = '';
-            }
+                $this->view->setMessage('Bye bye!');
+            } 
 
             $this->sessionModel->unsetSessions();
-
-            $this->sessionModel->setSpecificMessage('logoutMessage' , 'Bye bye!');
-
-            return $this->view->render(false, $this->loginView, $this->registerView, $message, 'login');
-            // return header("Location: /1dv610-L3/");
-            // header("Location: /1dv610-L3/");
-            // die();
+            return $this->view->render(false, $this->loginView, $this->registerView, 'login');
         }
     }
 
-    //Get messages from the input validation methods
-    private function getMessage($decideWhichView) {
+    //Get messages from the user input validation methods
+    private function getMessage($viewMessage) {
 
-        if ($decideWhichView == 'login') {
+        if ($viewMessage == 'login') {
             return $this->loginModel->validateLoginAttempt($this->loginView->getUsername(), $this->loginView->getPassword());
 
-        } else if ($decideWhichView == 'register') {
+        } else if ($viewMessage == 'register') {
             return $this->registerModel->validateRegisterAttempt($this->registerView->getUsername(), $this->registerView->getPassword(), $this->registerView->getRepeatedPassword());
         }
     }

@@ -13,7 +13,6 @@ class LoginModel {
 
     public function validateLoginAttempt($username, $password) {
         $message = '';
-        $_SESSION['message'] = '';
 
         if ($username == '' && $password == '') {
             $message = 'Username is missing';
@@ -25,10 +24,11 @@ class LoginModel {
             $message = 'Username is missing';
 
         } else if ($this->database->findAndVerifyUser($username, $password)) {
-            $_SESSION['message'] = 'Welcome';
+
             $_SESSION['loggedIn'] = true;
             $_SESSION['username'] = $username;
-            return;
+
+            return $message = 'Welcome';            
             
         } else if (!$this->database->findAndVerifyUser($username, $password)) {
             $message = 'Wrong name or password';

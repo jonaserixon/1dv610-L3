@@ -4,7 +4,9 @@ namespace view;
 
 class LayoutView {
 
-    public function render($isLoggedIn, LoginView $v, RegisterView $rv, $message, $decideViewToRender) {
+    private $message = '';
+
+    public function render($isLoggedIn, LoginView $v, RegisterView $rv, $decideViewToRender) {
         echo '<!DOCTYPE html>
         <html>
             <head>
@@ -15,7 +17,7 @@ class LayoutView {
             <h1>Assignment 2</h1>
             ' . $this->renderIsLoggedIn($isLoggedIn, $decideViewToRender) . '
             <div class="container">
-                ' . $this->renderLoginOrRegister($v, $rv, $message, $decideViewToRender) . '
+                ' . $this->renderLoginOrRegister($v, $rv, $decideViewToRender) . '
                 ' . $this->displayTime() . '
             </div>
             </body>
@@ -39,13 +41,17 @@ class LayoutView {
     }
     
 
-    private function renderLoginOrRegister($v, $rv, $message, $decideViewToRender) {
+    private function renderLoginOrRegister($v, $rv, $decideViewToRender) {
         if ($decideViewToRender == 'login') {
-            return $v->response($message, false);
+            return $v->response($this->message, false);
         } else if ($decideViewToRender == 'register') {
-            return $rv->response($message);
+            return $rv->response($this->message);
         } else if ($decideViewToRender == 'editname') {
-            return $v->response($message, true);            
+            return $v->response($this->message, true);            
         }
+    }
+
+    public function setMessage($message) {
+        $this->message = $message;
     }
 }
