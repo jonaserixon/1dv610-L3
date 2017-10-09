@@ -7,7 +7,7 @@ class RegisterModel {
     private $database;
     private $registerView;
     
-    public function __construct($database, $registerView) {
+    public function __construct(DatabaseModel $database, RegisterView $registerView) {
         $this->database = $database;
         $this->registerView = $registerView;
     }
@@ -34,9 +34,7 @@ class RegisterModel {
 
             } else if (preg_match('/</',$username) || (preg_match('/>/',$username))) {
                 $message = 'Username contains invalid characters.';
-                $newName =  strip_tags($username);
-                $username = $newName;
-                $this->registerView->setUsername($newName);
+                $this->registerView->setUsername(strip_tags($username));
                 //Fixa 
                 //bättre 
                 //lösning

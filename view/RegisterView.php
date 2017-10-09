@@ -14,7 +14,7 @@ class RegisterView {
 
     private $registerModel;
     
-    public function __construct($registerModel	) {
+    public function __construct(RegisterModel $registerModel	) {
         $this->registerModel = $registerModel;
     }
 

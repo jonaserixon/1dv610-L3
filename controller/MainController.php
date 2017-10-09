@@ -35,7 +35,15 @@ class MainController {
             //Då skall message (Welcome) clearas
 
             if ($this->loginView->clicksChangeName()) {
-                $this->view->render(true, $this->loginView, $this->registerView, $this->sessionModel->clearMessage(), 'editname');                
+
+                $message = '';
+                                
+                if ($this->loginView->editAttempt()) {
+                    $message = $this->loginModel->validateEditedName($this->loginView->getEditedName());
+                }
+
+                $this->view->render(true, $this->loginView, $this->registerView, $message, 'editname');
+                
             } else {
                 $this->view->render(true, $this->loginView, $this->registerView, $this->sessionModel->clearMessage(), 'login');                
             }

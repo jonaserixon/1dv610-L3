@@ -18,7 +18,7 @@ class LoginView {
 	private $loginModel;
 	private $sessionModel;
 
-	public function __construct($loginModel, $sessionModel) {
+	public function __construct(LoginModel $loginModel, SessionModel $sessionModel) {
 		$this->loginModel = $loginModel;
 		$this->sessionModel = $sessionModel;
 	}
@@ -74,6 +74,12 @@ class LoginView {
 	
 	public function editAttempt() {
 		return isset($_POST[self::$editName]);
+	}
+
+	public function getEditedName() {
+		if (isset($_POST[self::$newName])) {
+			return $_POST[self::$newName];
+		}
 	}
  
 

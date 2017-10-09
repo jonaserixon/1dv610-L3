@@ -42,6 +42,7 @@ class DatabaseModel {
             return true;
         }
     }
+
     public function alreadyExist($username) {
         $lines = file('../database/database.txt');
         foreach ($lines as $n => $line) {
@@ -50,6 +51,16 @@ class DatabaseModel {
             } 
         }
         return false;    
+    }
+
+    public function EditUsername($username, $originalName) {
+        $lines = file('../database/database.txt');
+        foreach ($lines as $n => $line) {
+            if ($line == $originalName . "\n") {                    
+                $line = $username;
+                //Skriv över användarnamnet på raden
+            } 
+        }
     }
 
 }
