@@ -7,9 +7,9 @@ class RegisterModel {
     private $database;
     private $registerView;
     
-    public function __construct(DatabaseModel $database, RegisterView $registerView) {
+    public function __construct(DatabaseModel $database) {
         $this->database = $database;
-        $this->registerView = $registerView;
+        // $this->registerView = $registerView;
     }
 
     public function validateRegisterAttempt($username, $password, $passwordRepeat) {
@@ -34,7 +34,7 @@ class RegisterModel {
 
             } else if (preg_match('/</',$username) || (preg_match('/>/',$username))) {
                 $message = 'Username contains invalid characters.';
-                $this->registerView->setUsername(strip_tags($username));
+                // $this->registerView->setUsername(strip_tags($username));
                 //Fixa 
                 //bättre 
                 //lösning
@@ -44,35 +44,12 @@ class RegisterModel {
                 $_SESSION['isRegistered'] = true;
 
                 $this->database->register($username, $password);
-                return header("Location: /1dv610-L3/index.php");
+                header("Location: /1dv610-L3/index.php");
+                die();
             }
         }
         $_SESSION['isRegistered'] = false;
 
         return $message;
     }
-
-    // public function isRegistered() {
-    //     if (isset($_SESSION['isRegistered']) && $_SESSION['isRegistered']) {
-    //         return $_SESSION['isRegistered'];
-    //     }
-        
-    //     return false;
-    // }
-
-    // public function wantsToRenderRegister() {
-    //     $_SESSION['register'] = true;
-    // }
-
-    // public function hasRenderedRegister() {
-    //     $_SESSION['register'] = false;
-    // }
-
-    // public function checkRegisterState() {
-    //     if (isset($_SESSION['register']) && $_SESSION['register'] == true) {
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
 }

@@ -3,6 +3,7 @@
 namespace view;
 
 class LoginView {
+	
 	private static $login = 'LoginView::Login';
 	private static $logout = 'LoginView::Logout';
 	private static $name = 'LoginView::UserName';
@@ -18,7 +19,7 @@ class LoginView {
 	private $loginModel;
 	private $sessionModel;
 
-	public function __construct(LoginModel $loginModel, SessionModel $sessionModel) {
+	public function __construct(\model\LoginModel $loginModel, \model\SessionModel $sessionModel) {
 		$this->loginModel = $loginModel;
 		$this->sessionModel = $sessionModel;
 	}

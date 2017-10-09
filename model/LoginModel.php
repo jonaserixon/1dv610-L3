@@ -6,7 +6,7 @@ class LoginModel {
 
     private $database;
 
-    public function __construct(DatabaseModel $database) {
+    public function __construct(\model\DatabaseModel $database) {
         $this->database = $database;
     }
 
@@ -48,9 +48,9 @@ class LoginModel {
             $message = 'Username contains invalid characters.';
             // $this->registerView->setUsername(strip_tags($username));
         } else {
-            $message = 'balle';
-            echo $_SESSION['username'];
-            $this->database->EditUsername($username, $_SESSION['username']);
+            $message = 'success';
+            // echo $_SESSION['username'];
+            $this->database->editUsername($username, $_SESSION['username']);
             //success!
             
         }

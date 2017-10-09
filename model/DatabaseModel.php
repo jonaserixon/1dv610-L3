@@ -53,14 +53,21 @@ class DatabaseModel {
         return false;    
     }
 
-    public function EditUsername($username, $originalName) {
-        $lines = file('../database/database.txt');
-        foreach ($lines as $n => $line) {
-            if ($line == $originalName . "\n") {                    
+    public function editUsername($username, $originalName) {
+        $file = '../database/database.txt';
+        $content = file($file);
+        foreach ($content as $n => $line) {
+            if ($line == $originalName . "\n") {   
+                echo $line;
+                echo "hehe";                 
                 $line = $username;
-                //Skriv över användarnamnet på raden
+                $allContent = implode("", $content); //Put the array back into one string
+                file_put_contents('../database/database.txt', $allContent);
             } 
         }
+
+
+        //file_put_contents( $filename , implode( "\n", $lines ) );
     }
 
 }
