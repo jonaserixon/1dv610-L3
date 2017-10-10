@@ -6,7 +6,7 @@ class LayoutView {
 
     private $message = '';
 
-    public function render($isLoggedIn, LoginView $v, RegisterView $rv, $decideViewToRender) {
+    public function render($isLoggedIn, LoginView $loginView, RegisterView $registerView, $decideViewToRender) {
         echo '<!DOCTYPE html>
         <html>
             <head>
@@ -17,7 +17,7 @@ class LayoutView {
             <h1>Assignment 2</h1>
             ' . $this->renderIsLoggedIn($isLoggedIn, $decideViewToRender) . '
             <div class="container">
-                ' . $this->renderLoginOrRegister($v, $rv, $decideViewToRender) . '
+                ' . $this->renderLoginOrRegister($loginView, $registerView, $decideViewToRender) . '
                 ' . $this->displayTime() . '
             </div>
             </body>
@@ -41,13 +41,16 @@ class LayoutView {
     }
     
 
-    private function renderLoginOrRegister($v, $rv, $decideViewToRender) {
+    //Tells reponse() which view to render
+    private function renderLoginOrRegister($loginView, $registerView, $decideViewToRender) {
         if ($decideViewToRender == 'login') {
-            return $v->response($this->message, false);
+            return $loginView->response($this->message, false);
+
         } else if ($decideViewToRender == 'register') {
-            return $rv->response($this->message);
+            return $registerView->response($this->message);
+
         } else if ($decideViewToRender == 'editname') {
-            return $v->response($this->message, true);            
+            return $loginView->response($this->message, true);            
         }
     }
 

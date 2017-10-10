@@ -64,6 +64,10 @@ class RegisterView {
         }    
     }
 
+    public function receiveStripped($username) {
+        return $username;
+    }
+
     public function setUsername($username) {
         $this->theUsername = $username;
     }

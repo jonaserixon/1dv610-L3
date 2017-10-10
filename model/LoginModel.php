@@ -43,13 +43,15 @@ class LoginModel {
         $message = '';
         if ($this->database->alreadyExist($username)) {
             $message = 'User exists, pick another username.';
+
         } else if (preg_match('/</',$username) || (preg_match('/>/',$username))) {
             $message = 'Username contains invalid characters.';
+
         } else if (strlen($username) < 1) {
             $message = 'Username is too short.';
+            
         } else {    
             $message = 'success';
-
             //Save to database
             $this->database->editUsername($username, $_SESSION['username']);
         }

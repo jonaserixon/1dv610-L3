@@ -11,7 +11,6 @@ class SessionModel {
     //Login & Logout methods
     public function isLoggedIn() {
         if (isset($_SESSION['loggedIn'])) {
-            // unset($_SESSION['logoutMessage']);
             return $_SESSION['loggedIn'];
         }
         return false;
@@ -23,22 +22,11 @@ class SessionModel {
         }
     }
 
-    public function getSpecificMessage($messageName) {
-        return $_SESSION[$messageName];
-    }
-
-    public function setSpecificMessage($messageName, $message) {
-        $_SESSION[$messageName] = $message;
-    }
-
     public function unsetSessions() {
         unset($_SESSION['loggedIn']);
         unset($_SESSION['username']);
         unset($_SESSION['registeredName']);
-        // unset($_SESSION['message']);
     }
-
-
 
     //Register methods
     public function isRegistered() {

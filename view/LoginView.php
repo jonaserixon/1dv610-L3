@@ -25,18 +25,19 @@ class LoginView {
 	}
 
     public function response($message, $shouldRenderEditname) {
-		//Generera vy beroende på om man är inloggad eller ej
-		
+		//Render login, logout or edit form
 		if ($this->sessionModel->isLoggedIn()) {
 
 			if ($shouldRenderEditname) {
 				return $this->generateEditUsernameHTML($message);
 			}
+
 			return $this->generateLogoutButtonHTML($message);
 		}
 
         return $this->generateLoginFormHTML($message);
 	}
+
 
 	public function loginAttempt() {
 		return isset($_POST[self::$login]);
@@ -66,8 +67,7 @@ class LoginView {
         }
 	}
 	
-
-
+	
 	//EDIT USERNAME
 	public function userClicksEditName() {
         return isset($_GET['edit']);
@@ -113,7 +113,6 @@ class LoginView {
 			</form>
 		';
 	}
-
 
 	private function generateEditUsernameHTML($message) {
 		return '

@@ -44,11 +44,14 @@ class MainController {
     
                 return $this->view->render($this->sessionModel->isLoggedIn(), $this->loginView, $this->registerView, 'login');
 
-            //Kolla om användaren vill se register vyn
+            //Render register view
             } else if ($this->registerView->userClicksRegisterLink()) {
                                 
                 if ($this->registerView->attemptRegister()) {
                     $this->view->setMessage($this->getMessage('register'));
+                    if ($this->getMessage('register') === 'Username contains invalid characters.') {
+                        $this->registerView->setUsername($this->registerModel->getStrippedUsername());
+                    }
                 }
 
                 return $this->view->render(false, $this->loginView, $this->registerView, 'register');
@@ -62,7 +65,6 @@ class MainController {
                 return $this->view->render(false, $this->loginView, $this->registerView, 'login');
             }
         }
-        
         $this->whenUserWantsLogout();
     }
 
@@ -74,10 +76,12 @@ class MainController {
 
         } else if ($viewMessage == 'register') {
             return $this->registerModel->validateRegisterAttempt($this->registerView->getUsername(), $this->registerView->getPassword(), $this->registerView->getRepeatedPassword());
+            
         } else if ($viewMessage == 'edit') {
             return $this->loginModel->validateEditedName($this->loginView->getEditedName());
         }
     }
+
 
     private function userIsEditing() {
         if ($this->loginView->editAttempt()) {
@@ -88,6 +92,7 @@ class MainController {
 
         return $this->view->render(true, $this->loginView, $this->registerView, 'editname');
     }
+
 
     private function whenUserWantsLogout() {
         if ($this->loginView->logoutAttempt()) {
