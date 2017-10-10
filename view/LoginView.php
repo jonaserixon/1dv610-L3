@@ -24,14 +24,14 @@ class LoginView {
 		$this->sessionModel = $sessionModel;
 	}
 
-    public function response($message) {
+    public function response($message, $shouldRenderEditname) {
 		//Generera vy beroende på om man är inloggad eller ej
 		
 		if ($this->sessionModel->isLoggedIn()) {
 
-			// if ($shouldRenderEditname) {
-			// 	return $this->generateEditUsernameHTML($message);
-			// }
+			if ($shouldRenderEditname) {
+				return $this->generateEditUsernameHTML($message);
+			}
 			return $this->generateLogoutButtonHTML($message);
 		}
 
@@ -58,7 +58,7 @@ class LoginView {
 		}
 	}
 
-	public function rememberUsername() {
+	private function rememberUsername() {
 		if (isset($_SESSION['registeredName'])) {
 			return $_SESSION['registeredName'];
 		} else if (isset($_POST[self::$name])) {
@@ -69,7 +69,7 @@ class LoginView {
 
 
 	//EDIT USERNAME
-	public function clicksChangeName() {
+	public function userClicksEditName() {
         return isset($_GET['edit']);
 	}
 	
@@ -107,7 +107,7 @@ class LoginView {
 
 	private function generateLogoutButtonHTML($message) {
 		return '
-			<form  method="post" >
+			<form method="post" >
 				<p id="' . self::$messageId . '">' . $message . '</p>
 				<input type="submit" name="' . self::$logout . '" value="logout"/>
 			</form>
@@ -118,7 +118,7 @@ class LoginView {
 	private function generateEditUsernameHTML($message) {
 		return '
 		<h1>Edit your username</h1>
-			<form  method="post" >
+			<form method="post">
 				<p id="' . self::$messageId . '">' . $message . '</p>
 				<input type="text" id="' . self::$newName . '" name="' . self::$newName . '" value="Enter new name" />
 				<input type="submit" name="' . self::$editName . '" value="Edit name"/>
@@ -126,7 +126,7 @@ class LoginView {
 
 			<br>
 
-			<form  method="post" >
+			<form action="index.php" method="post" >
 				<input type="submit" name="' . self::$logout . '" value="logout"/>
 			</form>
 		';

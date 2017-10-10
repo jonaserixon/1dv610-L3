@@ -54,20 +54,16 @@ class DatabaseModel {
     }
 
     public function editUsername($username, $originalName) {
+        $result = '';
         $file = '../database/database.txt';
         $content = file($file);
         foreach ($content as $n => $line) {
-            if ($line == $originalName . "\n") {   
-                echo $line;
-                echo "hehe";                 
-                $line = $username;
-                $allContent = implode("", $content); //Put the array back into one string
-                file_put_contents('../database/database.txt', $allContent);
-            } 
+            if ($line == $originalName . "\n") {           
+                $result .= $username . "\n";
+            } else {
+                $result .= $line;
+            }
         }
-
-
-        //file_put_contents( $filename , implode( "\n", $lines ) );
+        file_put_contents('../database/database.txt', $result);
     }
-
 }

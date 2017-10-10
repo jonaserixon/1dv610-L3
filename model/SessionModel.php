@@ -34,6 +34,7 @@ class SessionModel {
     public function unsetSessions() {
         unset($_SESSION['loggedIn']);
         unset($_SESSION['username']);
+        unset($_SESSION['registeredName']);
         // unset($_SESSION['message']);
     }
 

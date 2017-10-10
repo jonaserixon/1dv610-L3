@@ -47,12 +47,11 @@ class LoginModel {
         } else if (preg_match('/</',$username) || (preg_match('/>/',$username))) {
             $message = 'Username contains invalid characters.';
             // $this->registerView->setUsername(strip_tags($username));
-        } else {
+        } else if (strlen($username) < 1) {
+            $message = 'Username is too short.';
+        } else {    
             $message = 'success';
-            // echo $_SESSION['username'];
             $this->database->editUsername($username, $_SESSION['username']);
-            //success!
-            
         }
         // echo $message;
         return $message;

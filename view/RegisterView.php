@@ -29,7 +29,7 @@ class RegisterView {
     }
 
 
-    public function clicksRegisterLink() {
+    public function userClicksRegisterLink() {
         return isset($_GET['register']);
     }
 
