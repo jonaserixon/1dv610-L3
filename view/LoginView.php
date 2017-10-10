@@ -24,14 +24,14 @@ class LoginView {
 		$this->sessionModel = $sessionModel;
 	}
 
-    public function response($message, $shouldRenderEditname) {
+    public function response($message) {
 		//Generera vy beroende på om man är inloggad eller ej
 		
 		if ($this->sessionModel->isLoggedIn()) {
 
-			if ($shouldRenderEditname) {
-				return $this->generateEditUsernameHTML($message);
-			}
+			// if ($shouldRenderEditname) {
+			// 	return $this->generateEditUsernameHTML($message);
+			// }
 			return $this->generateLogoutButtonHTML($message);
 		}
 

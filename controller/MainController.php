@@ -77,9 +77,7 @@ class MainController {
             
             } else {
                 //Rendera 'home' vyn
-
                 if ($this->sessionModel->isRegistered()) {
-                    //registered new user
                     $this->view->setMessage('Registered new user.');
                     return $this->view->render(false, $this->loginView, $this->registerView, 'login');
                 } else {
