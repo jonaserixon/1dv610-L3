@@ -24,11 +24,7 @@ class MainController {
         $this->registerView = new \view\RegisterView($this->registerModel);
     }
  
-    public function start() {
-        //TODO:
-        //gör en setView metod också som bestämmer vilken vy som renderas så jag slipper skriva render() hela jävla tiden
-        //Ta bort register view från registermodel, jao
-
+    public function start() {        
         if ($this->sessionModel->isLoggedIn()) {
 
             if ($this->loginView->userClicksEditName()) {   
@@ -42,29 +38,19 @@ class MainController {
             }
 
         } else {
-            if ($this->registerView->userClicksRegisterLink()) {
-                $this->sessionModel->wantsToRenderRegister();
-            }
 
-            //Försöker logga in
             if ($this->loginView->loginAttempt()) {
-                
                 $this->view->setMessage($this->getMessage('login'));
     
-                if ($this->sessionModel->isLoggedIn()) {
-                    return $this->view->render(true, $this->loginView, $this->registerView, 'login');
-                } else {
-                    return $this->view->render(false, $this->loginView, $this->registerView, 'login');
-                }
-                
+                return $this->view->render($this->sessionModel->isLoggedIn(), $this->loginView, $this->registerView, 'login');
+
             //Kolla om användaren vill se register vyn
-            } else if ($this->sessionModel->checkRegisterState()) {
-                
-                $this->sessionModel->hasRenderedRegister();
-                
+            } else if ($this->registerView->userClicksRegisterLink()) {
+                                
                 if ($this->registerView->attemptRegister()) {
                     $this->view->setMessage($this->getMessage('register'));
                 }
+
                 return $this->view->render(false, $this->loginView, $this->registerView, 'register');
             
             } else {

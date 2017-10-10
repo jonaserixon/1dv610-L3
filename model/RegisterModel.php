@@ -5,7 +5,6 @@ namespace model;
 class RegisterModel {
 
     private $database;
-    private $registerView;
     private $message = '';
     
     public function __construct(DatabaseModel $database) {
@@ -34,6 +33,8 @@ class RegisterModel {
             } else if (preg_match('/</',$username) || (preg_match('/>/',$username))) {
                 $this->message = 'Username contains invalid characters.';
                 // $this->registerView->setUsername(strip_tags($username));
+
+                // $this->stripUsername($username);
                 //Fixa 
                 //bättre 
                 //lösning
@@ -43,12 +44,19 @@ class RegisterModel {
                 $_SESSION['isRegistered'] = true;
 
                 $this->database->register($username, $password);
-                header("Location: /1dv610-L3/index.php");
-                die();
+                // header("Location: /1dv610-L3/index.php");
+                // die();
+
+                return true;
             }
         }
         $_SESSION['isRegistered'] = false;
 
         return $this->message;
     }
+
+    public function stripUsername($username) {
+        return strip_tags($username);
+    }
+
 }

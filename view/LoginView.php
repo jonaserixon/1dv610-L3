@@ -120,7 +120,7 @@ class LoginView {
 		<h1>Edit your username</h1>
 			<form method="post">
 				<p id="' . self::$messageId . '">' . $message . '</p>
-				<input type="text" id="' . self::$newName . '" name="' . self::$newName . '" value="Enter new name" />
+				<input type="text" id="' . self::$newName . '" name="' . self::$newName . '" placeholder="Enter new name" />
 				<input type="submit" name="' . self::$editName . '" value="Edit name"/>
 			</form>
 
