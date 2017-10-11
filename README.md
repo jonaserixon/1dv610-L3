@@ -7,12 +7,21 @@
 4. Create a text file and name it "database.txt"
 5. Start your local server and run the application
 
-## Test case - Change username when logged in
+## Use case - Change username
 
-### Input:
-1. User is logged in and clicks on "Change username"
-2. Enter a new name in input field
-3. Clicks "Edit name" submit button
+### Pre-conditions
+- User is logged in and has clicked on "Change username" link
 
-### Output:
-- Message displaying "successfully changed your username!"
+### Main Scenario:
+1. Starts when a user wants to change their username
+2. System asks for new username
+3. User enters new username
+4. Clicks "edit username"
+5. System saves the new username and show a "success" message containing new username
+
+### Alternate Scenario
+- Username could not be changed (Username already taken, username is empty or username contains invalid characters)
+-   i. System presents error message
+-  ii. Step 2 in main scenario
+
+See all use cases here https://github.com/dntoll/1dv610/blob/master/assignments/A2_resources/UseCases.md

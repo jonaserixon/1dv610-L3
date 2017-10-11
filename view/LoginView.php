@@ -18,10 +18,12 @@ class LoginView {
 	
 	private $loginModel;
 	private $sessionModel;
+	private $database;
 
-	public function __construct(\model\LoginModel $loginModel, \model\SessionModel $sessionModel) {
+	public function __construct(\model\LoginModel $loginModel, \model\SessionModel $sessionModel, $database) {
 		$this->loginModel = $loginModel;
 		$this->sessionModel = $sessionModel;
+		$this->database = $database;
 	}
 
     public function response($message, $shouldRenderEditname) {
@@ -33,7 +35,7 @@ class LoginView {
 			}
 
 			return $this->generateLogoutButtonHTML($message);
-		}
+		} 
 
         return $this->generateLoginFormHTML($message);
 	}
@@ -65,6 +67,22 @@ class LoginView {
 		} else if (isset($_POST[self::$name])) {
             return $_POST[self::$name];
         }
+	}
+
+	//COOKIES
+	public function userClicksCookie() {
+		return isset($_POST[self::$keep]);
+	}
+
+	public function setCookies() {
+		setcookie("LoginView::CookieName", $this->getUsername());
+		setcookie("LoginView::CookiePassword", $this->getPassword());
+	}
+
+	public function doCookiesExist() {
+		if (isset($_COOKIE['LoginView::CookieName'])) {
+			return isset($_COOKIE['LoginView::CookieName']);
+		}
 	}
 	
 	
@@ -102,6 +120,7 @@ class LoginView {
 					<input type="submit" name="' . self::$login . '" value="login" />
 				</fieldset>
 			</form>
+			<p>Currently ' . $this->database->getAmountOfUsers() . ' registered users.</p>
 		';
 	}
 
@@ -116,7 +135,7 @@ class LoginView {
 
 	private function generateEditUsernameHTML($message) {
 		return '
-		<h1>Edit your username</h1>
+		<h1>Change your username</h1>
 			<form method="post">
 				<p id="' . self::$messageId . '">' . $message . '</p>
 				<input type="text" id="' . self::$newName . '" name="' . self::$newName . '" placeholder="Enter new name" />

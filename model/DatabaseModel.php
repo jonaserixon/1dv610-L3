@@ -42,6 +42,10 @@ class DatabaseModel {
     }
 
     public function alreadyExist($username) {
+        if ($username === '') {
+            return false;
+        }
+
         $dbContent = file(self::$databasePath);
         foreach ($dbContent as $n => $line) {
             if ($line == $username . "\n") {    
@@ -52,7 +56,6 @@ class DatabaseModel {
     }
 
     public function editUsername($username, $originalName) {
-        echo "editUsername()";
         $_SESSION['username'] = $username;
         $result = '';
         $dbContent = file(self::$databasePath);
@@ -64,7 +67,18 @@ class DatabaseModel {
                 $result .= $line;
             }
         }
-        
         file_put_contents(self::$databasePath, $result);
+    }
+
+    public function getAmountOfUsers() {
+        $userCount = 0;
+        $dbContent = file(self::$databasePath);
+        foreach ($dbContent as $n => $line) {
+            $userCount++;
+        }
+        //Prevent it from showing a negative value
+        if (!$userCount > 0) { return 0; }
+
+        return ($userCount - 1) / 2;
     }
 }

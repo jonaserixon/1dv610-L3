@@ -20,15 +20,16 @@ class MainController {
         $this->registerModel = new \model\RegisterModel($this->databaseModel);
 
         $this->view = new \view\LayoutView();
-        $this->loginView = new \view\LoginView($this->loginModel, $this->sessionModel);
+        $this->loginView = new \view\LoginView($this->loginModel, $this->sessionModel, $this->databaseModel);
         $this->registerView = new \view\RegisterView($this->registerModel);
     }
  
-    public function start() {        
+    public function start() {    
         if ($this->sessionModel->isLoggedIn()) {
-
+            
             if ($this->loginView->userClicksEditName()) {   
                 //EditController
+                $this->whenUserWantsLogout();
                 return $this->userIsEditing();
             } 
             
@@ -41,14 +42,15 @@ class MainController {
 
             if ($this->loginView->loginAttempt()) {
                 $this->view->setMessage($this->getMessage('login'));
-    
+
                 return $this->view->render($this->sessionModel->isLoggedIn(), $this->loginView, $this->registerView, 'login');
 
             //Render register view
             } else if ($this->registerView->userClicksRegisterLink()) {
-                                
+    
                 if ($this->registerView->attemptRegister()) {
                     $this->view->setMessage($this->getMessage('register'));
+
                     if ($this->getMessage('register') === 'Username contains invalid characters.') {
                         $this->registerView->setUsername($this->registerModel->getStrippedUsername());
                     }
@@ -60,7 +62,7 @@ class MainController {
                 //Rendera 'home' vyn
                 if ($this->sessionModel->isRegistered()) {
                     $this->view->setMessage('Registered new user.');
-                } 
+                }
 
                 return $this->view->render(false, $this->loginView, $this->registerView, 'login');
             }
@@ -87,9 +89,6 @@ class MainController {
         if ($this->loginView->editAttempt()) {
             $this->view->setMessage($this->getMessage('edit'));                    
         }
-        //Fixa till detta
-        $this->whenUserWantsLogout();
-
         return $this->view->render(true, $this->loginView, $this->registerView, 'editname');
     }
 

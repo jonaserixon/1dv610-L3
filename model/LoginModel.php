@@ -5,56 +5,53 @@ namespace model;
 class LoginModel {
 
     private $database;
+    private $message = '';
 
     public function __construct(\model\DatabaseModel $database) {
         $this->database = $database;
     }
 
-
+    
     public function validateLoginAttempt($username, $password) {
-        $message = '';
-
         if ($username == '' && $password == '') {
-            $message = 'Username is missing';
+            $this->message = 'Username is missing';
             
         } else if (strlen($username) > 0 && $password == '') {
-            $message = 'Password is missing';
+            $this->message = 'Password is missing';
 
         } else if (strlen($password) > 0 && $username == '') {
-            $message = 'Username is missing';
+            $this->message = 'Username is missing';
 
         } else if ($this->database->findAndVerifyUser($username, $password)) {
             $_SESSION['loggedIn'] = true;
             $_SESSION['username'] = $username;
 
-            return $message = 'Welcome';            
+            return $this->message = 'Welcome';            
             
         } else if (!$this->database->findAndVerifyUser($username, $password)) {
-            $message = 'Wrong name or password';
+            $this->message = 'Wrong name or password';
         }
-
         $_SESSION['loggedIn'] = false;
 
-        return $message;
+        return $this->message;
     }
 
 
     public function validateEditedName($username) {
-        $message = '';
         if ($this->database->alreadyExist($username)) {
-            $message = 'User exists, pick another username.';
+            $this->message = 'User exists, pick another username.';
 
         } else if (preg_match('/</',$username) || (preg_match('/>/',$username))) {
-            $message = 'Username contains invalid characters.';
+            $this->message = 'Username contains invalid characters.';
 
-        } else if (strlen($username) < 1) {
-            $message = 'Username is too short.';
+        } else if (strlen($username) === 0) {
+            $this->message = 'Username is too short.';
             
         } else {    
-            $message = 'success';
+            $this->message = 'Successfully changed your username to ' . $username . '!';
             //Save to database
             $this->database->editUsername($username, $_SESSION['username']);
         }
-        return $message;
+        return $this->message;
     }
 }
