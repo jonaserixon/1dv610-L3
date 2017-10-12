@@ -20,20 +20,21 @@ class LoginView {
 	private $sessionModel;
 	private $database;
 
+	private $registeredName = '';
+
 	public function __construct(\model\LoginModel $loginModel, \model\SessionModel $sessionModel, $database) {
 		$this->loginModel = $loginModel;
 		$this->sessionModel = $sessionModel;
 		$this->database = $database;
 	}
 
+	
     public function response($message, $shouldRenderEditname) {
 		//Render login, logout or edit form
 		if ($this->sessionModel->isLoggedIn()) {
-
 			if ($shouldRenderEditname) {
 				return $this->generateEditUsernameHTML($message);
 			}
-
 			return $this->generateLogoutButtonHTML($message);
 		} 
 
@@ -62,30 +63,18 @@ class LoginView {
 	}
 
 	private function rememberUsername() {
-		if (isset($_SESSION['registeredName'])) {
-			return $_SESSION['registeredName'];
+		if ($this->registeredName) {
+			return $this->registeredName;
 		} else if (isset($_POST[self::$name])) {
             return $_POST[self::$name];
         }
 	}
 
-	//COOKIES
-	public function userClicksCookie() {
-		return isset($_POST[self::$keep]);
+	public function setRegisteredName($registeredName) {
+		$this->registeredName = $registeredName;
 	}
 
-	public function setCookies() {
-		setcookie("LoginView::CookieName", $this->getUsername());
-		setcookie("LoginView::CookiePassword", $this->getPassword());
-	}
 
-	public function doCookiesExist() {
-		if (isset($_COOKIE['LoginView::CookieName'])) {
-			return isset($_COOKIE['LoginView::CookieName']);
-		}
-	}
-	
-	
 	//EDIT USERNAME
 	public function userClicksEditName() {
         return isset($_GET['edit']);

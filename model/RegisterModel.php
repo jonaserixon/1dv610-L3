@@ -12,6 +12,7 @@ class RegisterModel {
         $this->database = $database;
     }
 
+    
     public function validateRegisterAttempt($username, $password, $passwordRepeat) {
         if (strlen($username) == 0 && strlen($password) == 0 && strlen($passwordRepeat) == 0) {
             $this->message = 'Username has too few characters, at least 3 characters. <br> Password has too few characters, at least 6 characters.';

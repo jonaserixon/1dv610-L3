@@ -6,6 +6,7 @@ class LoginModel {
 
     private $database;
     private $message = '';
+    private $strippedUsername = '';
 
     public function __construct(\model\DatabaseModel $database) {
         $this->database = $database;
@@ -43,6 +44,7 @@ class LoginModel {
 
         } else if (preg_match('/</',$username) || (preg_match('/>/',$username))) {
             $this->message = 'Username contains invalid characters.';
+            $this->strippedUsername = strip_tags($username);
 
         } else if (strlen($username) === 0) {
             $this->message = 'Username is too short.';
@@ -53,5 +55,9 @@ class LoginModel {
             $this->database->editUsername($username, $_SESSION['username']);
         }
         return $this->message;
+    }
+
+    public function getStrippedUsername() {
+        return $this->strippedUsername;
     }
 }

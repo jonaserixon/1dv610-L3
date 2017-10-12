@@ -24,14 +24,13 @@ class MainController {
         $this->registerView = new \view\RegisterView($this->registerModel);
     }
  
+
     public function start() {    
         if ($this->sessionModel->isLoggedIn()) {
             
-            if ($this->loginView->userClicksEditName()) {   
-                //EditController
-                $this->whenUserWantsLogout();
+            if ($this->loginView->userClicksEditName()) {                   
                 return $this->userIsEditing();
-            } 
+            }
             
             if ($this->loginView->logoutAttempt() === false) {
                 //Runs when user reloads page
@@ -64,6 +63,8 @@ class MainController {
                     $this->view->setMessage('Registered new user.');
                 }
 
+                $this->loginView->setRegisteredName($this->sessionModel->getRegisteredName());
+
                 return $this->view->render(false, $this->loginView, $this->registerView, 'login');
             }
         }
@@ -84,22 +85,22 @@ class MainController {
         }
     }
 
-
     private function userIsEditing() {
+        $this->whenUserWantsLogout();
+
         if ($this->loginView->editAttempt()) {
             $this->view->setMessage($this->getMessage('edit'));                    
         }
         return $this->view->render(true, $this->loginView, $this->registerView, 'editname');
     }
 
-
     private function whenUserWantsLogout() {
         if ($this->loginView->logoutAttempt()) {
             if ($this->sessionModel->isLoggedIn()) {
                 $this->view->setMessage('Bye bye!');
             } 
-
             $this->sessionModel->unsetSessions();
+
             return $this->view->render(false, $this->loginView, $this->registerView, 'login');
         }
     }

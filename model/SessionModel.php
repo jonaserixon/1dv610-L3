@@ -28,6 +28,12 @@ class SessionModel {
         unset($_SESSION['registeredName']);
     }
 
+    public function getRegisteredName() {
+        if (isset($_SESSION['registeredName'])) { 
+            return $_SESSION['registeredName'];
+        }
+    }
+
     //Register methods
     public function isRegistered() {
         if (isset($_SESSION['isRegistered']) && $_SESSION['isRegistered']) {

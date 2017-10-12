@@ -5,6 +5,23 @@ namespace model;
 class DatabaseModel {
 
     private static $databasePath = '../database/database.txt';
+
+    public function __construct() {
+       $this->doesDatabaseExist();
+    }
+
+    private function doesDatabaseExist() {
+        if (!file_exists(self::$databasePath)) {
+            if (!file_exists('../database')) {
+                mkdir('../database', 0777, true);
+            }
+            $file = fopen(self::$databasePath,"w");
+
+            fwrite($file, '');
+            fclose($file);
+        }
+    }
+    
     
     public function findAndVerifyUser($username, $pw) {
         $dbContent = file(self::$databasePath);
@@ -16,10 +33,10 @@ class DatabaseModel {
                 $PasswordType2 = substr(trim(json_encode($dbContent[$i + 1]), '"'), 0, -1);
                 
                 //Remove backslashes because of strange bug which keeps adding random backslashes to hash for some reason.
-                if ($this->verifyHash($pw, str_replace('\\', '', $PasswordType))) {
+                if ($this->verifyPassword($pw, str_replace('\\', '', $PasswordType))) {
                     return true;
                 }
-                if ($this->verifyHash($pw, str_replace('\\', '', $PasswordType2))) {
+                if ($this->verifyPassword($pw, str_replace('\\', '', $PasswordType2))) {
                     return true;
                 }
             }
@@ -35,7 +52,7 @@ class DatabaseModel {
         fclose($myfile);
     }
     
-    public function verifyHash($inputPassword, $databasePassword) {
+    public function verifyPassword($inputPassword, $databasePassword) {
         if (password_verify($inputPassword, $databasePassword)) {
             return true;
         }
